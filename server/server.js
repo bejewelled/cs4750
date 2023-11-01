@@ -41,6 +41,16 @@ app.get('/getData', (req, res) => {
     });
 });
  
+app.post('/search', (req, res) => {
+  con.query('SELECT * FROM recipe', (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Database query failed');
+    } else {
+      res.json(result);
+    }
+  }); 
+});
 
 
 app.listen(port, () => {
