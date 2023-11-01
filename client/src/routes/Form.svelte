@@ -1,8 +1,6 @@
 <script>
     let title = "";
     let description = "";
-    let ingredients = "";
-    let directions = "";
   
     let ingredientNames = [''];
     let units = [''];
@@ -10,7 +8,6 @@
     let instructions = [''];
     let tagNames = [''];
     let tagTypes = [''];
-    let dummyState = false;
 
 
     function addItem(identifier) {
@@ -63,7 +60,7 @@
         for(let i = 0; i < ingredientNames.length; i++) {
             ingredients.push({ name: ingredientNames[i] });
             amounts.push({
-                ingredientId: i + 1,  // assuming IDs are sequential starting from 1
+                ingredientId: i + 1,  
                 unit: units[i],
                 value: values[i]
             });
@@ -81,7 +78,6 @@
             });
         }
         
-        // Build final payload
         const payload = {
             title,
             description,
@@ -111,12 +107,6 @@
 
 
 </script>
-
-<div>
-    {#if dummyState}
-    <!-- dummy element; won't actually render anything -->
-    {/if}
-</div>
   
 <form on:submit={addRecipe}>
     <label for="title">Title:</label>
