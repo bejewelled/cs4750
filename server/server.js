@@ -1,10 +1,12 @@
 const mysql = require('mysql');
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json());
+
 
 const port = 3000;
 
@@ -33,6 +35,10 @@ con.connect((err) => {
     });
   });
 
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request for ${req.url}`);
+  next();
+});
 
 
 app.get('/getData', (req, res) => {
@@ -45,11 +51,12 @@ app.get('/getData', (req, res) => {
       }
     });
 });
- 
 
 app.post('/addRecipe', (req, res) => {
   const { title, description, ingredients, amounts, directions, tags, userId } = req.body;
   
+  console.log("Received body:", JSON.stringify(req.body, null, 2));
+
   console.log('Received a request to add a recipe with title:', title);
   
   con.query('INSERT INTO Recipe (title, description) VALUES (?, ?)', [title, description], (err, result) => {
@@ -125,9 +132,14 @@ app.post('/addRecipe', (req, res) => {
 // }
 
 
+// ERROR LOGGING
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(400).send('Bad Request');
+});
 
-// Consider using SQL transactions since you have multiple insert operations that depend on each other. This way, if one fails, you can rollback the entire transaction to maintain data integrity.
+// TODO Consider using SQL transactions since you have multiple insert operations that depend on each other. This way, if one fails, you can rollback the entire transaction to maintain data integrity.
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
