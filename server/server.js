@@ -113,6 +113,19 @@ app.post('/addRecipe', (req, res) => {
   });
 });
 
+// Example request body:
+// {
+//   "title": "Test Recipe",
+//   "description": "Test Description",
+//   "ingredients": [{"name": "Sugar"}],
+//   "amounts": [{"ingredientId": 1, "unit": "teaspoon", "value": "2"}],
+//   "directions": ["Add sugar"],
+//   "tags": [{"name": "Dessert", "type": "category"}],
+//   "userId": 1
+// }
+
+
+
 
 // Consider using SQL transactions since you have multiple insert operations that depend on each other. This way, if one fails, you can rollback the entire transaction to maintain data integrity.
 
