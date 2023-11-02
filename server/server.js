@@ -120,6 +120,30 @@ app.post('/addRecipe', (req, res) => {
   });
 });
 
+app.get('/searchRecipe', (req, res) => {
+  const { title } = req.query;
+
+  if (!title) {
+    return res.status(400).send('Title is required for search');
+  }
+
+  console.log('Received a request to search for a recipe with title:', title);
+
+  con.query('SELECT * FROM Recipe WHERE title LIKE ?', ['%' + title + '%'], (err, results) => {
+    if (err) {
+      console.error('Error searching for recipe:', err);
+      return res.status(500).send('Failed to search for recipe');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send('No recipes found with the provided title');
+    }
+
+    res.status(200).json(results);
+  });
+});
+
+
 // Example request body:
 // {
 //   "title": "Test Recipe",
