@@ -28,15 +28,14 @@ async function handleSubmit(event) {
   event.preventDefault();
 
   try {
-    const response = await axios.get('http://localhost:3000/searchRecipe', {
-      params: {
-        title: name
-      },
+    const endpoint = `http://localhost:3000/searchRecipe?title=${name}`;
+    const response = await axios.get(endpoint, {
       headers: {
         'Content-Type': 'application/json',
-		'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*'
       },
     });
+
 
     if (response.status === 200) {
       console.log('success', response.data)
