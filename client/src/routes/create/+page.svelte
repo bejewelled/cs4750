@@ -6,9 +6,9 @@
 
 
 <div class="text-column flexbox">
-	<h2>
-		Create Recipe 
-	</h2>
+	<h1>
+		Create a Recipe 
+	</h1>
 
 	<Form />
 

@@ -1,5 +1,5 @@
 <div class="text-column flexbox">
-  <h2 class="text-center w-full text-black">Search for Recipes</h2>
+  <h1 class="text-center w-full text-black">Search for Recipes</h1>
 </div>
 
 <div class="gray-background text-column flexbox">

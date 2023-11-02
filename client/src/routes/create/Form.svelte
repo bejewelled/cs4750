@@ -114,9 +114,12 @@
     
     <label for="description">Description:</label>
     <textarea bind:value={description} id="description" name="description"></textarea>
-  
+    
+    <!-- Ingredients --> 
+    <h3> Ingredients: </h3>
     {#each ingredientNames as name, index}
     <div>
+      <br>
       <label for={`ingredient_name_${index}`}>Ingredient Name:</label>
       <input bind:value={ingredientNames[index]} type="text" id={`ingredient_name_${index}`} name="ingredient_name[]">
 
@@ -148,39 +151,50 @@
       <label for={`value_${index}`}>Value:</label>
       <input bind:value={values[index]} type="text" id={`value_${index}`} name="value[]">
 
-      <button type="button" on:click={() => addItem('ingredientNames')}>+</button>
-      <button type="button" on:click={() => removeItem('ingredientNames', index)}>-</button>
+      <button type="button" on:click={() => addItem('ingredientNames')}>Add Ingredient</button>
+      <button type="button" on:click={() => removeItem('ingredientNames', index)}>Remove Ingredient</button>
       
     </div>
     {/each}
 
+    <!-- Instructions -->
+    <br>
+    <h3> Instructions: </h3>
     {#each instructions as instruction, index}
     <div>
+    <br>
       <label for={`instruction_${index}`}>Instruction:</label>
       <textarea bind:value={instructions[index]} id={`instruction_${index}`} name="instruction[]"></textarea>
-      <button type="button" on:click={() => addItem("instructions")}>+</button>
-      <button type="button" on:click={() => removeItem("instructions", index)}>-</button>
+      <button type="button" on:click={() => addItem("instructions")}>Add Instruction</button>
+      <button type="button" on:click={() => removeItem("instructions", index)}>Remove Instruction</button>
     </div>
     {/each}
   
+    <!-- Tags -->
+    <br>
+    <h3> Tags: </h3>
     {#each tagNames as tagName, index}
     <div>
+    <br>
       <label for={`tag_name_${index}`}>Tag Name:</label>
       <input bind:value={tagNames[index]} type="text" id={`tag_name_${index}`} name="tag_name[]">
-      <button type="button" on:click={() => addItem("tagNames")}>+</button>
-      <button type="button" on:click={() => removeItem("tagNames", index)}>-</button>
-      
       <label for={`tag_type_${index}`}>Tag Type:</label>
       <select bind:value={tagTypes[index]} id={`tag_type_${index}`} name="tag_type[]">
           <option value="dietary restrictions">Dietary Restrictions</option>
           <option value="country of origin">Country of Origin</option>
           <option value="category">Category</option>
       </select>
+      <button type="button" on:click={() => addItem("tagNames")}>Add Tag</button>
+      <button type="button" on:click={() => removeItem("tagNames", index)}>Remove Tag</button>
     </div>
     {/each}
+
+    <br>
     
     <!-- Submit button -->
-    <input type="submit" value="Submit">
+    <div style="float:right;">
+        <input type="submit" value="Submit">
+    </div>
 </form>
 
 
