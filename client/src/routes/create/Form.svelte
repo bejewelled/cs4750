@@ -9,6 +9,8 @@
     let tagNames = [''];
     let tagTypes = [''];
 
+    let showModal = false;
+
 
     function addItem(identifier) {
         if(identifier === 'ingredientNames') {
@@ -97,13 +99,32 @@
 
             if (response.ok) {
                 console.log('Recipe added successfully.');
+                
+                // Reset the form data
+                title = "";
+                description = "";
+                ingredientNames = [''];
+                units = [''];
+                values = [''];
+                instructions = [''];
+                tagNames = [''];
+                tagTypes = [''];
+
+                // Show the modal
+                showModal = true;
             } else {
                 console.log('Failed to add recipe. Status:', response.status);
             }
+
         } catch (error) {
             console.log("Error:", error);
         }
     }
+
+    function closeModal() {
+    showModal = false;
+    }
+
 
 
 </script>
@@ -197,6 +218,15 @@
     </div>
 </form>
 
+{#if showModal}
+<div class="modal">
+    <div class="modal-content">
+        <span class="close-button" on:click={closeModal}>&times;</span>
+        <p>Recipe added successfully!</p>
+    </div>
+</div>
+{/if}
+
 
 <style>
   form {
@@ -253,4 +283,38 @@
   input[type="submit"]:hover {
     background-color: #0056b3; 
   }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .modal-content {
+        background-color: #f0f0f0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        position: relative;
+    }
+
+    .close-button {
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        font-size: 24px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: #555;
+    }
+
 </style>
