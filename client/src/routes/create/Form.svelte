@@ -131,10 +131,9 @@
   
 <form on:submit={addRecipe}>
     <label for="title">Title:</label>
-    <input bind:value={title} type="text" id="title" name="title">
-    
+    <input bind:value={title} type="text" id="title" name="title" required maxlength="100">    
     <label for="description">Description:</label>
-    <textarea bind:value={description} id="description" name="description"></textarea>
+    <textarea bind:value={description} id="description" name="description" required></textarea>
     
     <!-- Ingredients --> 
     <h3> Ingredients: </h3>
@@ -142,10 +141,10 @@
     <div>
       <br>
       <label for={`ingredient_name_${index}`}>Ingredient Name:</label>
-      <input bind:value={ingredientNames[index]} type="text" id={`ingredient_name_${index}`} name="ingredient_name[]">
+      <input bind:value={ingredientNames[index]} type="text" id={`ingredient_name_${index}`} name="ingredient_name[]" required maxlength="50">
 
       <label for={`unit_${index}`}>Unit:</label>
-      <select bind:value={units[index]} id={`unit_${index}`} name="unit[]">
+      <select bind:value={units[index]} id={`unit_${index}`} name="unit[]" required>
           <option value="grams">grams</option>
           <option value="kilograms">kilograms</option>
           <option value="ounces">ounces</option>
@@ -170,7 +169,7 @@
       </select>      
   
       <label for={`value_${index}`}>Value:</label>
-      <input bind:value={values[index]} type="text" id={`value_${index}`} name="value[]">
+      <input bind:value={values[index]} type="text" id={`value_${index}`} name="value[]" required>
 
       <button type="button" on:click={() => addItem('ingredientNames')}>Add Ingredient</button>
       <button type="button" on:click={() => removeItem('ingredientNames', index)}>Remove Ingredient</button>
@@ -185,7 +184,7 @@
     <div>
     <br>
       <label for={`instruction_${index}`}>Instruction:</label>
-      <textarea bind:value={instructions[index]} id={`instruction_${index}`} name="instruction[]"></textarea>
+      <textarea bind:value={instructions[index]} id={`instruction_${index}`} name="instruction[]" required></textarea>
       <button type="button" on:click={() => addItem("instructions")}>Add Instruction</button>
       <button type="button" on:click={() => removeItem("instructions", index)}>Remove Instruction</button>
     </div>
@@ -198,9 +197,9 @@
     <div>
     <br>
       <label for={`tag_name_${index}`}>Tag Name:</label>
-      <input bind:value={tagNames[index]} type="text" id={`tag_name_${index}`} name="tag_name[]">
+      <input bind:value={tagNames[index]} type="text" id={`tag_name_${index}`} name="tag_name[]" required>
       <label for={`tag_type_${index}`}>Tag Type:</label>
-      <select bind:value={tagTypes[index]} id={`tag_type_${index}`} name="tag_type[]">
+      <select bind:value={tagTypes[index]} id={`tag_type_${index}`} name="tag_type[]" required>
           <option value="dietary restrictions">Dietary Restrictions</option>
           <option value="country of origin">Country of Origin</option>
           <option value="category">Category</option>
