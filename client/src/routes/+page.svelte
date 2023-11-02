@@ -1,61 +1,37 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
-	import Form from './Form.svelte';
-
-</script>
-
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-	<Form />
-	<Counter />
-</section>
+<main>
+  <div class="image-container">
+    <img src="/chefyourway.jpeg" alt="Chef Your Way" class="home-image" />
+    <h1 class="home-title"><span class="bold">Chef Your Way</span></h1>
+  </div>
+</main>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-	h1 {
-		width: 100%;
-	}
+  .image-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%; /* Ensure the image is 100% of the screen width */
+  }
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
+  .home-image {
+    width: 100%;
+    height: auto; 
+    display: block;
+  }
 
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
+  .home-title {
+    position: absolute;
+    top: 50%; /* Center the text vertically */
+    left: 50%; /* Center the text horizontally */
+    transform: translate(-50%, -50%); /* Center the text both horizontally and vertically */
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 20px; /* Adjust the margin as needed */
+    color: white; /* Set the text color to white or your preferred color */
+  }
 </style>

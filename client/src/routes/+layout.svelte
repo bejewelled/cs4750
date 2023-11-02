@@ -11,7 +11,8 @@
 	</main>
 
 	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		<p class="footer-text">Chef Your Way</p>
+		<p> © Copyright 2023</p>
 	</footer>
 </div>
 
@@ -38,16 +39,19 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		padding: 12px;
+		padding: 20px; 
+		background-color: lightblue; 
 	}
 
-	footer a {
+	.footer-text {
 		font-weight: bold;
+		font-size: 16px; 
+		color: #333; 
 	}
 
 	@media (min-width: 480px) {
 		footer {
-			padding: 12px 0;
+			padding: 20px 0; 
 		}
 	}
 </style>

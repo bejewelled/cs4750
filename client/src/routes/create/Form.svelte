@@ -183,4 +183,60 @@
     <input type="submit" value="Submit">
 </form>
 
-  
+
+<style>
+  form {
+    background-color: #f0f0f0; 
+    padding: 20px;
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding-right: 50px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;  
+  }
+
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+  }
+
+  select {
+    appearance: none; 
+  }
+
+  button {
+    background-color: #007BFF; 
+    color: #fff; 
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  button:hover {
+    background-color: #0056b3; 
+  }
+
+  input[type="submit"] {
+    background-color: #007BFF; 
+    color: #fff; 
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #0056b3; 
+  }
+</style>
