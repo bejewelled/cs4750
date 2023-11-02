@@ -16,11 +16,11 @@ const con = mysql.createConnection({
   // user: "jtg7sz",
   // password: "Fall2023",
   // database: "jtg7sz"
-  host: "localhost",
+  host: "mysql01.cs.virginia.edu",
   port: "3306", // Optional, since 3306 is the default MySQL port
-  user: "pk0523",
-  password: "Fall2023",
-  database: "milestone2"
+  user: "ft9kr",
+  password: "Passwordforphp",
+  database: "ft9kr_b"
 });
 
 
