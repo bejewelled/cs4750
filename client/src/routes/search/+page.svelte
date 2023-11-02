@@ -3,7 +3,7 @@
 </div>
 
 <div class="gray-background text-column flexbox">
-  <form on:submit={handleSubmit} method="POST">
+  <form on:submit={handleSubmit} method="GET">
     <div class="form-group">
       <label for="name">Recipe Name:</label>
       <input type="text" id="name" bind:value={name} class="form-control" />
@@ -18,11 +18,8 @@
   </form>
 </div>
 
-
 <script>
-
-import axios from 'axios'
-
+import axios from 'axios';
 
 let name = '';
 let desc = '';
@@ -30,10 +27,11 @@ let desc = '';
 async function handleSubmit(event) {
   event.preventDefault();
 
-  const data = { name, desc };
-
   try {
-    const response = await axios.post('/search', data, {
+    const response = await axios.get('http://localhost:3000/searchRecipe', {
+      params: {
+        title: name
+      },
       headers: {
         'Content-Type': 'application/json',
 		'Access-Control-Allow-Origin': '*'
@@ -41,16 +39,16 @@ async function handleSubmit(event) {
     });
 
     if (response.status === 200) {
-		console.log('success')
+      console.log('success', response.data)
     } else {
-		console.log('returned status ' + response.status + ' ' + response.statusText)
+      console.log('returned status ' + response.status + ' ' + response.statusText)
     }
   } catch (error) {
-    // Handle any errors that occurred during the request
     console.error(error);
   }
 }
 </script>
+
 
 <style>
 
