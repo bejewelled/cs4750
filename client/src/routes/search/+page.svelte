@@ -9,13 +9,19 @@
       <input type="text" id="name" bind:value={name} class="form-control" />
     </div>
 
-    <div class="form-group">
-      <label for="desc">Recipe Description:</label>
-      <input type="text" id="desc" bind:value={desc} class="form-control" />
-    </div>
+      <!-- <div class="form-group">
+        <label for="desc">Recipe Description:</label>
+        <input type="text" id="desc" bind:value={desc} class="form-control" />
+      </div> -->
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+</div>
+
+<div class="text-column flexbox results">
+  <h2 class="text-center w-full text-black">Search Results:</h2>
+  <ul id="recipeResults">
+  </ul>
 </div>
 
 <script>
@@ -36,16 +42,40 @@ async function handleSubmit(event) {
       },
     });
 
+    const resultsContainer = document.getElementById('recipeResults');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    const searchInput = document.getElementById('name');
+    searchInput.value = ''; // Clear search input
 
     if (response.status === 200) {
-      console.log('success', response.data)
+      console.log('success', response.data);
+
+      if (response.data.length === 0) {
+        const noResultsMsg = document.createElement('p');
+        noResultsMsg.textContent = 'No recipes found with the provided title';
+        resultsContainer.appendChild(noResultsMsg);
+      } else {
+        response.data.forEach(recipe => {
+          const listItem = document.createElement('li');
+          listItem.textContent = recipe.title;
+          resultsContainer.appendChild(listItem);
+        });
+      }
+
+    } else if (response.status === 404) {
+      const noResultsMsg = document.createElement('p');
+      noResultsMsg.textContent = 'No recipes found with the provided title';
+      resultsContainer.appendChild(noResultsMsg);
     } else {
-      console.log('returned status ' + response.status + ' ' + response.statusText)
+      console.log('Unexpected response status ' + response.status + ' ' + response.statusText);
     }
   } catch (error) {
-    console.error(error);
+    console.error('Error during the request:', error);
   }
 }
+
+
 </script>
 
 
