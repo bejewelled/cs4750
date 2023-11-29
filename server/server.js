@@ -59,7 +59,7 @@ app.post('/addRecipe', (req, res) => {
 
   console.log('Received a request to add a recipe with title:', title);
   
-  con.query('INSERT INTO Recipe (title, description) VALUES (?, ?)', [title, description], (err, result) => {
+  con.query('INSERT INTO recipe (title, description) VALUES (?, ?)', [title, description], (err, result) => {
     if (err) {
       console.error('Error inserting recipe:', err);
       return res.status(500).send('Failed to insert recipe');
@@ -108,7 +108,7 @@ app.post('/addRecipe', (req, res) => {
       });
     });
 
-    con.query('INSERT INTO Created_by (user_id, recipe_id) VALUES (?, ?)', [userId, recipeId], (err, result) => {
+    con.query('INSERT INTO created_by (user_id, recipe_id) VALUES (?, ?)', [userId, recipeId], (err, result) => {
       if (err) {
         console.error('Error associating user with recipe:', err);
         return res.status(500).send('Failed to associate user with recipe');
