@@ -1,12 +1,32 @@
 <div class="text-column flexbox">
-  <h1 class="text-center w-full text-black">Search for Recipes</h1>
+  <h1 class="text-center w-full text-black">Register</h1>
 </div>
 
 <div class="gray-background text-column flexbox">
-  <form on:submit={handleSubmit} method="GET">
+  <form on:submit={handleSubmit} method="POST">
     <div class="form-group">
-      <label for="name">Recipe Name:</label>
-      <input type="text" id="name" bind:value={name} class="form-control" />
+      <label for="email">Email</label>
+      <input type="text" id="email" bind:value={email} 
+      class="form-control" required 
+      minlength="5"
+      maxlength="31"
+      />
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" bind:value={username} 
+      class="form-control" required 
+      minlength="5"
+      maxlength="31"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="text" id="password" bind:value={password} 
+      class="form-control" required 
+      minlength="8"
+      maxlength="31"
+      />
     </div>
 
       <!-- <div class="form-group">
@@ -18,58 +38,33 @@
   </form>
 </div>
 
-<div class="text-column flexbox results">
-  <h2 class="text-center w-full text-black">Search Results:</h2>
-  <ul id="recipeResults">
-  </ul>
-</div>
+
 
 <script>
 import axios from 'axios';
 
-let name = '';
-let desc = '';
+let email = '';
+let username = '';
+let password = '';
 
 async function handleSubmit(event) {
   event.preventDefault();
 
+  const data = {
+    email: email,
+    username: username,
+    password: password,
+  };
+  
   try {
-    const endpoint = `http://localhost:3000/searchRecipe?title=${name}`;
-    const response = await axios.get(endpoint, {
+    const endpoint = `http://localhost:3000/register`;
+    const response = await axios.post('/register', data, {
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Methods': 'POST',
         'Access-Control-Allow-Origin': '*'
       },
     });
-
-    const resultsContainer = document.getElementById('recipeResults');
-    resultsContainer.innerHTML = ''; // Clear previous results
-
-    const searchInput = document.getElementById('name');
-    searchInput.value = ''; // Clear search input
-
-    if (response.status === 200) {
-      console.log('success', response.data);
-
-      if (response.data.length === 0) {
-        const noResultsMsg = document.createElement('p');
-        noResultsMsg.textContent = 'No recipes found with the provided title';
-        resultsContainer.appendChild(noResultsMsg);
-      } else {
-        response.data.forEach(recipe => {
-          const listItem = document.createElement('li');
-          listItem.textContent = recipe.title;
-          resultsContainer.appendChild(listItem);
-        });
-      }
-
-    } else if (response.status === 404) {
-      const noResultsMsg = document.createElement('p');
-      noResultsMsg.textContent = 'No recipes found with the provided title';
-      resultsContainer.appendChild(noResultsMsg);
-    } else {
-      console.log('Unexpected response status ' + response.status + ' ' + response.statusText);
-    }
   } catch (error) {
     console.error('Error during the request:', error);
   }
@@ -80,6 +75,14 @@ async function handleSubmit(event) {
 
 
 <style>
+
+    /* input:invalid {
+      border: 2px dashed red;
+    }
+
+    input:valid {
+      border: 2px solid black;
+    }    */
 
   .gray-background {
     background-color: #f0f0f0; 

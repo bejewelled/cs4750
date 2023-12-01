@@ -33,7 +33,7 @@ async function handleSubmit(event) {
     const response = await axios.post('/search', data, {
       headers: {
         'Content-Type': 'application/json',
-		'Access-Control-Allow-Origin': '*'
+		    'Access-Control-Allow-Origin': '*'
       },
     });
 

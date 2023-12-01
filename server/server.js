@@ -6,6 +6,7 @@ const app = express();
 app.use(cors());
 // app.use(bodyParser.json());
 app.use(express.json());
+const bcrypt = require('bcrypt')
 
 
 const port = 3000;
@@ -51,6 +52,50 @@ app.get('/getData', (req, res) => {
       }
     });
 });
+
+app.get('/register', (req, res) => {
+  const { email, username, password } = req.query;
+
+  // password hashing + salting
+  const saltRounds = 10;
+  const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
+    return bcrypt.hash(password, salt);
+  })
+
+  con.query('INSERT INTO User (username, email, password) VALUES (?, ?, ?)', [username, email, saltedPass], (err, result) => {
+    if (err) {
+      console.error('Error inserting user:', err);
+      return res.status(500).send('Failed to insert user');
+    }
+    const userId = result.insertId;
+    console.log('Inserted user with ID:', userId);
+    res.status(200).send('User added successfully!');
+  });
+});
+
+app.get('/login', (req, res) => {
+  const { username, password } = req.query;
+  bcrypt.compare(password, hash).then((result) => {
+    if (result) {
+      console.log('Passwords match, grabbing user info...');
+
+      con.query('SELECT uid, username, email FROM User WHERE username = ?', [username], (err, result) => {
+        res.status(200).json(result);
+      }).catch(err => {console.log("Error grabbing user info post-login (NOT a comparison issue):", err)});
+    
+    } else {
+      console.log('Passwords do not match!');
+      res.status(400).send('Login failed!');
+    }
+  }).catch(err => {console.log("Error comparing passwords:", err)});
+});
+
+
+app.get('/getUserRecipes', (req, res) => {
+  const { userId } = req.query;
+
+});
+
 
 app.post('/addRecipe', (req, res) => {
   const { title, description, ingredients, amounts, directions, tags, userId } = req.body;
@@ -118,6 +163,13 @@ app.post('/addRecipe', (req, res) => {
       }
     });
   });
+});
+
+
+app.get('/profile', (req, res) => {
+
+  const { userId } = req.query;
+
 });
 
 app.get('/searchRecipe', (req, res) => {
