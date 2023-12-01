@@ -52,13 +52,15 @@ app.get('/getData', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  const { email, username, password } = req.query;
+  const { email, username, password } = req.body;
 
   // password hashing + salting
   // const saltRounds = 10;
   // const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
   //   return bcrypt.hash(password, salt);
   // })
+  console.log("Received body:", JSON.stringify(req.body, null, 2));
+  console.log(email, username, password)
 
   con.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, password], (err, result) => {
     if (err) {
@@ -72,7 +74,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  const { username, password } = req.query;
+  const { username, password } = req.body;
   bcrypt.compare(password, hash).then((result) => {
     if (result) {
       console.log('Passwords match, grabbing user info...');

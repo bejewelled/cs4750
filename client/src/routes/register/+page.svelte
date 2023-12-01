@@ -58,11 +58,9 @@ async function handleSubmit(event) {
   
   try {
     const endpoint = `http://localhost:3000/register`;
-    const response = await axios.post('/register', data, {
+    const response = await axios.post(endpoint, data, {
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Origin': '*'
       },
     });
   } catch (error) {
