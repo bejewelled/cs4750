@@ -74,7 +74,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.query;
   bcrypt.compare(password, hash).then((result) => {
     if (result) {
       console.log('Passwords match, grabbing user info...');
@@ -192,7 +192,29 @@ app.get('/searchRecipe', (req, res) => {
   });
 });
 
+app.put('/edit-recipe', (req, res) => {
+  const { recipe_id, title, description, directions } = req.body;
 
+  // Update Recipe table
+  con.query('UPDATE recipe SET title = ?, description = ? WHERE recipe_id = ?', [title, description, recipe_id], (err, result) => {
+    if (err) {
+      console.error('Error updating recipe:', err);
+      return res.status(500).json({ error: 'Failed to update recipe' });
+    }
+
+    // Update Recipe_Directions table
+    directions.forEach((direction, index) => {
+      con.query('UPDATE recipe_directions SET instruction = ? WHERE recipe_id = ? AND direction_id = ?', [direction, recipe_id, index + 1], (err, result) => {
+        if (err) {
+          console.error('Error updating direction:', err);
+          return res.status(500).json({ error: 'Failed to update direction' });
+        }
+      });
+    });
+
+    res.status(200).json({ message: 'Recipe updated successfully!' });
+  });
+});
 
 // Example request body:
 // {
