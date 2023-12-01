@@ -54,6 +54,11 @@ app.get('/getData', (req, res) => {
 app.post('/register', (req, res) => {
   const { email, username, password } = req.body;
 
+ 
+  const hashedPass = bcrypt.hash(password, 10, (err, hash) => {
+      if (err) return err; 
+      return hash;
+  })
   // password hashing + salting
   // const saltRounds = 10;
   // const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
@@ -73,7 +78,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
   const { username, password } = req.body;
   bcrypt.compare(password, hash).then((result) => {
     if (result) {
