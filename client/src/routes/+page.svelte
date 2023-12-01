@@ -1,11 +1,12 @@
 <main>
   <div class="image-container">
-    <img src="/chefyourway.jpeg" alt="Chef Your Way" class="home-image" />
+    <img src="/chef.jpeg" alt="Chef Your Way" class="home-image" />
     <h1 class="home-title"><span class="bold">Chef Your Way</span></h1>
   </div>
 </main>
 
 <style>
+
   main {
     display: flex;
     flex-direction: column;
