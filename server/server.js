@@ -216,6 +216,67 @@ app.put('/edit-recipe', (req, res) => {
   });
 });
 
+app.delete('/delete-recipe', (req, res) => {
+  const { recipe_id } = req.body;
+
+  // Delete from Created_By table
+  con.query('DELETE FROM created_by WHERE recipe_id = ?', [recipe_id], (err, result) => {
+    if (err) {
+      console.error('Error deleting from created_by:', err);
+      return res.status(500).json({ error: 'Failed to delete from created_by' });
+    }
+
+    // Delete from Recipe table
+    con.query('DELETE FROM recipe WHERE recipe_id = ?', [recipe_id], (err, result) => {
+      if (err) {
+        console.error('Error deleting recipe:', err);
+        return res.status(500).json({ error: 'Failed to delete recipe' });
+      }
+
+      // Delete from Recipe_Directions table
+      con.query('DELETE FROM recipe_directions WHERE recipe_id = ?', [recipe_id], (err, result) => {
+        if (err) {
+          console.error('Error deleting directions:', err);
+          return res.status(500).json({ error: 'Failed to delete directions' });
+        }
+      });
+
+      // Delete from Recipe_Ingredients table
+      con.query('DELETE FROM recipe_ingredients WHERE recipe_id = ?', [recipe_id], (err, result) => {
+        if (err) {
+          console.error('Error deleting ingredients:', err);
+          return res.status(500).json({ error: 'Failed to delete ingredients' });
+        }
+      });
+
+      // Delete from Ingredients_Amounts table
+      con.query('DELETE FROM ingredients_amounts WHERE recipe_id = ?', [recipe_id], (err, result) => {
+        if (err) {
+          console.error('Error deleting amounts:', err);
+          return res.status(500).json({ error: 'Failed to delete amounts' });
+        }
+      });
+
+      // Delete from Tags table
+      con.query('DELETE FROM tags WHERE recipe_id = ?', [recipe_id], (err, result) => {
+        if (err) {
+          console.error('Error deleting tags:', err);
+          return res.status(500).json({ error: 'Failed to delete tags' });
+        }
+      });
+
+      res.status(200).json({ message: 'Recipe deleted successfully!' });
+    });
+  });
+});
+
+// test delete recipe request body:
+// {
+//   "recipe_id": 1,
+//   "title": "Updated Chocolate Cake",
+//   "description": "An updated version of our simple and delicious chocolate cake recipe."
+// },
+
 // Example request body:
 // {
 //   "title": "Test Recipe",
