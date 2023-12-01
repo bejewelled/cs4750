@@ -41,27 +41,32 @@ let password = '';
 async function handleSubmit(event) {
   event.preventDefault();
 
-    const data = {
+  const data = {
     username: username,
-    password: password,
-  };
+    password: password
+  }
+
   try {
     const endpoint = `http://localhost:3000/login`;
-    const response = await axios.post('/login', data, {
+    const response = await axios.post(endpoint, data, {
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Origin': '*'
+        'Content-Type': 'application/json'
       },
     });
     if (response.status === 200) {
+      console.log(response);
       const user_data = response.data;
       // sends profile info to the temp store
       $profile.username = user_data.username;
       $profile.email = user_data.email;
-      $profile.uid = user_data.uid;
+      $profile.user_id = user_data.user_id;
+      if (!$profile.isLoggedIn) {
+        $profile.isLoggedIn = true;
+      }
 
-      window.location.href = '/profile';
+      console.log($profile)
+
+      //window.location.href = '/profile';
     } else {
       console.log('returned status ' + response.status + ' ' + response.statusText)
     }

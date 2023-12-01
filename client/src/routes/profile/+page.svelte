@@ -4,10 +4,11 @@
 
 
 <div class="text-column flexbox results">
-  <h2 class="text-center w-full text-black">Search Results:</h2>
-  <ul id="recipeResults">
+  <h2 class="text-center w-full text-black">User Recipes</h2>
+  <ul id="userRecipes">
   </ul>
 </div>
+
 
 <script>
 	import { profile } from './../../stores/profile.js';
@@ -29,19 +30,45 @@ onMount(() => {
   // fetch all user recipes
   fetchRecipes()
   // fetch user stats
-  fetchStats()
+  // fetchStats()
 })
 
 async function fetchRecipes() {
   try {
     const endpoint = `http://localhost:3000/profile?username=${username}`;
     const response = await axios.get('/getUserRecipes', {
-      uid: uid,
+      userId: ($profile['user_id'] > 0 ? $profile['user_id'] : -1),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       },
     });
+
+    const resultsContainer = document.getElementById('userRecipes');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    if (response.status === 200) {
+      console.log('success', response.data);
+
+      if (response.data.length === 0) {
+        const noResultsMsg = document.createElement('p');
+        noResultsMsg.textContent = 'No recipes found by this user';
+        resultsContainer.appendChild(noResultsMsg);
+      } else {
+        response.data.forEach(recipe => {
+          const listItem = document.createElement('li');
+          listItem.textContent = recipe.title;
+          resultsContainer.appendChild(listItem);
+        });
+      }
+
+    } else if (response.status === 404) {
+      const noResultsMsg = document.createElement('p');
+      noResultsMsg.textContent = 'No recipes found by this user';
+      resultsContainer.appendChild(noResultsMsg);
+    } else {
+      console.log('Unexpected response status ' + response.status + ' ' + response.statusText);
+    }
   } catch (err) {
     // 
   }

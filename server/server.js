@@ -53,52 +53,60 @@ app.get('/getData', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, username, password } = req.body;
-
- 
-  const hashedPass = bcrypt.hash(password, 10, (err, hash) => {
-      if (err) return err; 
-      return hash;
-  })
   // password hashing + salting
   // const saltRounds = 10;
   // const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
   //   return bcrypt.hash(password, salt);
   // })
-  console.log("Received body:", JSON.stringify(req.body, null, 2));
-  console.log(email, username, password)
-
-  con.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, password], (err, result) => {
-    if (err) {
-      console.error('Error inserting user:', err);
-      return res.status(500).send('Failed to insert user');
+  bcrypt.hash(password, 10).then((hashedPass) => {
+    console.log(hashedPass)
+    con.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass], (err, result) => {
+      if (err) {
+        console.error('Error inserting user:', err);
+        return res.status(500).send('Failed to insert user');
+      }
+      const userId = result.insertId;
+      console.log('Inserted user with ID:', userId);
+      res.status(200).send('User added successfully!');
+    })
     }
-    const userId = result.insertId;
-    console.log('Inserted user with ID:', userId);
-    res.status(200).send('User added successfully!');
+  );
   });
-});
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  bcrypt.compare(password, hash).then((result) => {
-    if (result) {
-      console.log('Passwords match, grabbing user info...');
-
-      con.query('SELECT uid, username, email FROM user WHERE username = ?', [username], (err, result) => {
-        res.status(200).json(result);
-      }).catch(err => {console.log("Error grabbing user info post-login (NOT a comparison issue):", err)});
-    
-    } else {
-      console.log('Passwords do not match!');
-      res.status(400).send('Login failed!');
-    }
-  }).catch(err => {console.log("Error comparing passwords:", err)});
-});
+  console.log(username)
+  console.log(password)
+  con.query('SELECT user_id, username, email, password FROM user WHERE username = ?', [username], (err, result) => {
+    if (err) console.log(err)
+    const info = result[0]
+    bcrypt.compare(password, info.password).then((result) => {
+      if (result) {
+        console.log('Passwords match, grabbing user info...');
+        res.status(200).json(info);      
+      } else {
+        console.log('Passwords do not match!');
+        res.status(400).send('Login failed!');
+      }
+    }).catch(err => {console.log("Error comparing passwords:", err)});
+    })
+  })
 
 
 app.get('/getUserRecipes', (req, res) => {
-  const { userId } = req.query;
-
+  const {userId} = req.query;
+  if (userId < 0) {
+    res.status(500).json({error: "Error! The user ID is invalid, indicating the user is not logged in."})
+  }
+  con.query('SELECT title FROM recipe NATURAL JOIN created_by WHERE user_id = ?', 
+  [userId], (err, results) => {
+    if (err) {
+      console.error('Error in retreiving recipes from user id' + userId, err);
+      return res.status(500).json({ error: 'Failed to search for recipe' });
+    }
+    // Always returning 200 status code
+    res.status(200).json(results);
+  });
 });
 
 
