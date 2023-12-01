@@ -28,9 +28,9 @@ con.connect((err) => {
     if (err) throw err;
     console.log("Connected!");
  
-    con.query("SELECT * FROM recipe", (err, result) => {
+    con.query("SHOW TABLES", (err, result) => {
       if (err) throw err;
-      console.log("Data received from Db:");
+      console.log("Tables in database:");
       console.log(result);
     });
   });
@@ -69,7 +69,7 @@ app.post('/addRecipe', (req, res) => {
     console.log('Inserted recipe with ID:', recipeId);
 
     ingredients.forEach(ingredient => {
-      con.query('INSERT INTO Recipe_Ingredients (recipe_id, ingredient_name) VALUES (?, ?)', [recipeId, ingredient.name], (err, result) => {
+      con.query('INSERT INTO recipe_ingredients (recipe_id, ingredient_name) VALUES (?, ?)', [recipeId, ingredient.name], (err, result) => {
         if (err) {
           console.error('Error inserting ingredient:', ingredient.name, err);
         } else {
@@ -79,7 +79,7 @@ app.post('/addRecipe', (req, res) => {
     });
 
     amounts.forEach(amount => {
-      con.query('INSERT INTO Ingredients_Amounts (recipe_id, ingredient_id, unit, value) VALUES (?, ?, ?, ?)', [recipeId, amount.ingredientId, amount.unit, amount.value], (err, result) => {
+      con.query('INSERT INTO ingredients_amounts (recipe_id, ingredient_id, unit, value) VALUES (?, ?, ?, ?)', [recipeId, amount.ingredientId, amount.unit, amount.value], (err, result) => {
         if (err) {
           console.error('Error inserting amount for ingredient ID:', amount.ingredientId, err);
         } else {
@@ -89,7 +89,7 @@ app.post('/addRecipe', (req, res) => {
     });
 
     directions.forEach(direction => {
-      con.query('INSERT INTO Recipe_Directions (recipe_id, instruction) VALUES (?, ?)', [recipeId, direction], (err, result) => {
+      con.query('INSERT INTO recipe_directions (recipe_id, instruction) VALUES (?, ?)', [recipeId, direction], (err, result) => {
         if (err) {
           console.error('Error inserting direction:', direction, err);
         } else {
@@ -99,7 +99,7 @@ app.post('/addRecipe', (req, res) => {
     });
 
     tags.forEach(tag => {
-      con.query('INSERT INTO Tags (recipe_id, tag_name, type) VALUES (?, ?, ?)', [recipeId, tag.name, tag.type], (err, result) => {
+      con.query('INSERT INTO tags (recipe_id, tag_name, type) VALUES (?, ?, ?)', [recipeId, tag.name, tag.type], (err, result) => {
         if (err) {
           console.error('Error inserting tag:', tag.name, 'of type', tag.type, err);
         } else {
