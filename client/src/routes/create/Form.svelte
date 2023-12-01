@@ -1,4 +1,6 @@
 <script>
+  import { profile } from '../../stores.js';
+
   let title = "";
   let description = "";
 
@@ -85,7 +87,9 @@
       amounts,
       directions,
       tags,
-      userId: 1,
+      // grab from session
+      userId: $profile.uid
+      // userId: 1,
     };
 
     try {
