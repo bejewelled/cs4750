@@ -76,8 +76,4 @@
     background-color: #f9f9f9;
   }
 
-  /* Additional styles for the registration form */
-  .registration-form {
-    /* ... */
-  }
 </style>

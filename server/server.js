@@ -42,15 +42,43 @@ app.use((req, res, next) => {
 
 
 app.get('/getData', (req, res) => {
-    con.query('SELECT * FROM recipe', (err, result) => {
+  con.query(
+    `SELECT r.id, r.title, r.description,
+    GROUP_CONCAT(DISTINCT ri.ingredient_name) AS ingredients, 
+    GROUP_CONCAT(DISTINCT rd.instruction) AS directions,
+    u.username AS creator_username, u.email AS creator_email
+    FROM recipe r
+    LEFT JOIN recipe_ingredients ri ON r.id = ri.recipe_id
+    LEFT JOIN recipe_directions rd ON r.id = rd.recipe_id
+    LEFT JOIN created_by cb ON r.id = cb.recipe_id
+    LEFT JOIN users u ON cb.user_id = u.id
+    GROUP BY r.id, r.title, r.description, u.username, u.email`,
+    (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).send('Database query failed');
       } else {
-        res.json(result);
+        // Modify the structure of the fetched data as needed before sending the response
+        const modifiedResult = result.map(row => ({
+          id: row.id,
+          title: row.title,
+          description: row.description,
+          ingredients: row.ingredients.split(','), // Convert the concatenated ingredients string into an array
+          directions: row.directions.split(','), // Convert the concatenated directions string into an array
+          creator: {
+            username: row.creator_username,
+            email: row.creator_email
+          }
+        }));
+
+        res.json(modifiedResult);
       }
-    });
+    }
+  );
 });
+
+
+
 
 app.post('/addRecipe', (req, res) => {
   const { title, description, ingredients, amounts, directions, tags, userId } = req.body;
@@ -141,9 +169,6 @@ app.get('/searchRecipe', (req, res) => {
 });
 
 
-
-
-// Registration endpoint
 // Registration endpoint
 app.post('/register', (req, res) => {
   const { username, email, password } = req.body;
@@ -159,9 +184,6 @@ app.post('/register', (req, res) => {
 
     const userId = result.insertId;
     console.log('Inserted user with ID:', userId);
-
-    // Other tables related to user (if needed)
-    // ...
 
     // Return a success response
     res.status(200).send('User registered successfully');
@@ -199,6 +221,51 @@ app.post('/login', (req, res) => {
       return res.status(401).send('User not found');
     }
   });
+});
+
+app.get('/recipe/:id', (req, res) => {
+  const recipeId = req.params.id;
+
+  con.query(
+    `SELECT r.id, r.title, r.description,
+    GROUP_CONCAT(DISTINCT ri.ingredient_name) AS ingredients, 
+    GROUP_CONCAT(DISTINCT rd.instruction) AS directions,
+    u.username AS creator_username, u.email AS creator_email
+    FROM recipe r
+    LEFT JOIN recipe_ingredients ri ON r.id = ri.recipe_id
+    LEFT JOIN recipe_directions rd ON r.id = rd.recipe_id
+    LEFT JOIN created_by cb ON r.id = cb.recipe_id
+    LEFT JOIN users u ON cb.user_id = u.id
+    WHERE r.id = ?
+    GROUP BY r.id, r.title, r.description, u.username, u.email`,
+    [recipeId],
+    (err, result) => {
+      if (err) {
+        console.error('Error fetching recipe details:', err);
+        res.status(500).json({ error: 'Failed to fetch recipe details' });
+      } else {
+        if (result.length > 0) {
+          // Organize fetched data to create a structured recipe object
+          const recipeDetails = {
+            id: result[0].id,
+            title: result[0].title,
+            description: result[0].description,
+            ingredients: result[0].ingredients ? result[0].ingredients.split(',') : [],
+            directions: result[0].directions ? result[0].directions.split(',') : [],
+            creator: {
+              username: result[0].creator_username,
+              email: result[0].creator_email
+            }
+          };
+
+          // Send the structured recipe details as JSON in the response
+          res.status(200).json(recipeDetails);
+        } else {
+          res.status(404).json({ error: 'Recipe not found' });
+        }
+      }
+    }
+  );
 });
 
 

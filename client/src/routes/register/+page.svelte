@@ -1,4 +1,4 @@
-<!-- HTML & Svelte Code -->
+<!-- HTML & Svelte Code for Registration -->
 <script>
   import axios from 'axios'
   
@@ -31,8 +31,8 @@
   };
 </script>
 
+<h1>Register</h1>
 <div class="register-container">
-  <h2>Register</h2>
   <form on:submit|preventDefault={handleRegister}>
     <div class="input-group">
       <label for="username">Username:</label>
@@ -59,10 +59,11 @@
     width: 100%;
     max-width: 400px;
     margin: 20px auto;
-    padding: 20px;
+    padding: 40px 40px 40px 40px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
   }
 
   h2 {
