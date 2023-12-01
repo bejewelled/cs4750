@@ -8,9 +8,7 @@ app.use(cors());
 app.use(express.json());
 const bcrypt = require('bcrypt')
 
-
 const port = 3000;
-
 
 const con = mysql.createConnection({
   // host: "mysql01.cs.virginia.edu", // Optional, since 3306 is the default MySQL port
@@ -53,16 +51,16 @@ app.get('/getData', (req, res) => {
     });
 });
 
-app.get('/register', (req, res) => {
+app.post('/register', (req, res) => {
   const { email, username, password } = req.query;
 
   // password hashing + salting
-  const saltRounds = 10;
-  const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
-    return bcrypt.hash(password, salt);
-  })
+  // const saltRounds = 10;
+  // const saltedPass = bcrypt.genSalt(saltRounds).then(salt => {
+  //   return bcrypt.hash(password, salt);
+  // })
 
-  con.query('INSERT INTO User (username, email, password) VALUES (?, ?, ?)', [username, email, saltedPass], (err, result) => {
+  con.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, password], (err, result) => {
     if (err) {
       console.error('Error inserting user:', err);
       return res.status(500).send('Failed to insert user');
@@ -79,7 +77,7 @@ app.get('/login', (req, res) => {
     if (result) {
       console.log('Passwords match, grabbing user info...');
 
-      con.query('SELECT uid, username, email FROM User WHERE username = ?', [username], (err, result) => {
+      con.query('SELECT uid, username, email FROM user WHERE username = ?', [username], (err, result) => {
         res.status(200).json(result);
       }).catch(err => {console.log("Error grabbing user info post-login (NOT a comparison issue):", err)});
     
