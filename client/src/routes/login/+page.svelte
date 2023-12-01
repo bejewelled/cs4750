@@ -1,133 +1,42 @@
-<div class="text-column flexbox">
-  <h1 class="text-center w-full text-black">Search for Recipes</h1>
-</div>
-
-<div class="gray-background text-column flexbox">
-  <form on:submit={handleSubmit} method="GET">
-    <div class="form-group">
-      <label for="name">Recipe Name:</label>
-      <input type="text" id="name" bind:value={name} class="form-control" />
-    </div>
-
-      <!-- <div class="form-group">
-        <label for="desc">Recipe Description:</label>
-        <input type="text" id="desc" bind:value={desc} class="form-control" />
-      </div> -->
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-</div>
-
-<div class="text-column flexbox results">
-  <h2 class="text-center w-full text-black">Search Results:</h2>
-  <ul id="recipeResults">
-  </ul>
-</div>
-
 <script>
-import axios from 'axios';
+  let email = '';
+  let password = '';
 
-let name = '';
-let desc = '';
+  const handleLogin = async () => {
+    const userData = { email, password };
+    
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
 
-async function handleSubmit(event) {
-  event.preventDefault();
-
-  try {
-    const endpoint = `http://localhost:3000/searchRecipe?title=${name}`;
-    const response = await axios.get(endpoint, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-    });
-
-    const resultsContainer = document.getElementById('recipeResults');
-    resultsContainer.innerHTML = ''; // Clear previous results
-
-    const searchInput = document.getElementById('name');
-    searchInput.value = ''; // Clear search input
-
-    if (response.status === 200) {
-      console.log('success', response.data);
-
-      if (response.data.length === 0) {
-        const noResultsMsg = document.createElement('p');
-        noResultsMsg.textContent = 'No recipes found with the provided title';
-        resultsContainer.appendChild(noResultsMsg);
+      if (response.ok) {
+        // Login successful, redirect or show success message
       } else {
-        response.data.forEach(recipe => {
-          const listItem = document.createElement('li');
-          listItem.textContent = recipe.title;
-          resultsContainer.appendChild(listItem);
-        });
+        const errorData = await response.json();
+        // Handle login error (show error message, etc.)
+        console.error(errorData.message);
       }
-
-    } else if (response.status === 404) {
-      const noResultsMsg = document.createElement('p');
-      noResultsMsg.textContent = 'No recipes found with the provided title';
-      resultsContainer.appendChild(noResultsMsg);
-    } else {
-      console.log('Unexpected response status ' + response.status + ' ' + response.statusText);
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle fetch error
     }
-  } catch (error) {
-    console.error('Error during the request:', error);
-  }
-}
-
-
+  };
 </script>
 
+<div>
+  <h2>Login</h2>
+  <form on:submit|preventDefault={handleLogin}>
+    <label for="email">Email:</label>
+    <input type="email" id="email" bind:value={email} />
 
-<style>
+    <label for="password">Password:</label>
+    <input type="password" id="password" bind:value={password} />
 
-  .gray-background {
-    background-color: #f0f0f0; 
-    padding: 20px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    padding-right: 50px;
-  }
-
-  .text-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .text-gray-300 {
-    color: #ccc; 
-  }
-
-  .form-group {
-    margin-bottom: 10px;
-  }
-
-  .form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  .btn {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    background-color: #007BFF; 
-  }
-
-  .btn-primary:hover {
-    background-color: #0056b3; 
-  }
-</style>
+    <button type="submit">Login</button>
+  </form>
+</div>

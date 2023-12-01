@@ -142,6 +142,66 @@ app.get('/searchRecipe', (req, res) => {
 
 
 
+
+// Registration endpoint
+// Registration endpoint
+app.post('/register', (req, res) => {
+  const { username, email, password } = req.body;
+
+  console.log('Received body:', JSON.stringify(req.body, null, 2));
+  console.log('Received a request to register user with username:', username);
+
+  con.query('INSERT INTO user (username, password, email) VALUES (?, ?, ?)', [username, password, email], (err, result) => {
+    if (err) {
+      console.error('Error inserting user:', err);
+      return res.status(500).send('Registration failed');
+    }
+
+    const userId = result.insertId;
+    console.log('Inserted user with ID:', userId);
+
+    // Other tables related to user (if needed)
+    // ...
+
+    // Return a success response
+    res.status(200).send('User registered successfully');
+  });
+});
+
+// Login endpoint
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  // Retrieve user data from the database
+  const sql = 'SELECT * FROM users WHERE email = ?';
+  connection.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      return res.status(500).send('Login failed');
+    }
+
+    if (results.length > 0) {
+      // Compare hashed password
+      bcrypt.compare(password, results[0].password, (err, match) => {
+        if (err) {
+          console.error('Error comparing passwords:', err);
+          return res.status(500).send('Login failed');
+        }
+        
+        if (match) {
+          // Passwords match, user is authenticated
+          return res.status(200).send('Login successful');
+        } else {
+          return res.status(401).send('Invalid credentials');
+        }
+      });
+    } else {
+      return res.status(401).send('User not found');
+    }
+  });
+});
+
+
 // Example request body:
 // {
 //   "title": "Test Recipe",
