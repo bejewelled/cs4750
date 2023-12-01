@@ -2,57 +2,56 @@
   import Header from './Header.svelte';
   import RegistrationForm from './register/+page.svelte';
   import LoginForm from './login/+page.svelte';
-  import './styles.css';
 </script>
 
 <div class="app">
-  <main>
-    <div class="image-container">
-      <img src="/chefyourway.jpeg" alt="Chef Your Way" class="home-image" />
-      <h1 class="home-title"><span class="bold">Chef Your Way</span></h1>
-    </div>
+  <div class="color-section"></div>
 
-    <div class="registration-container">
-      <RegistrationForm />
-    </div>
+  <div class="image-section">
+    <img src="/chefyourway.jpeg" alt="Chef Your Way" class="home-image" />
+    <h1 class="home-title"><span class="bold">Chef Your Way</span></h1>
+  </div>
 
-    <div class="login-container">
-      <LoginForm />
-    </div>
-  </main>
-
-  
+  <div class="registration-section">
+    <RegistrationForm />
+  </div>
 </div>
 
 <style>
   /* Your existing styles */
   /* ... */
 
-  /* Styles for main content */
+  /* Styles for the home sections */
   .app {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Styles for the image and title */
-  .image-container {
+  .color-section {
     position: relative;
     width: 100%;
-    max-width: 100vw; /* Set maximum width to viewport width */
+    height: 60vh; /* Adjust the height as desired */
+    background-color: #FFDAB9; /* Change to the desired color */
+    z-index: -1;
+  }
+
+  .image-section {
+    position: absolute;
+    margin-top: 90px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60vh; /* Should match the height of the color section */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .home-image {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%; /* Ensure image takes up full height of container */
+    object-fit: cover; /* Ensure the image covers the entire container */
   }
 
   .home-title {
@@ -60,26 +59,25 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
+    font-size: 5rem;
     text-align: center;
     margin-top: 20px;
     color: white;
+    z-index: 1;
   }
 
-  /* Styles for registration and login containers */
-  .registration-container,
-  .login-container {
+  .registration-section {
     width: 100%;
-    max-width: 400px; /* Adjust the width as needed */
-    margin: 20px auto; /* Adjust margins based on layout */
+    max-width: 800px;
+    margin: 20px auto; /* Adjust as needed */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
   }
 
-  /* Footer styles */
-  footer {
-    /* Your footer styles */
+  /* Additional styles for the registration form */
+  .registration-form {
+    /* ... */
   }
 </style>
